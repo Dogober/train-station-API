@@ -18,10 +18,10 @@ class Station(models.Model):
 class Route(models.Model):
     source = models.ForeignKey(Station, on_delete=models.CASCADE, related_name="routes_from")
     destination = models.ForeignKey(Station, on_delete=models.CASCADE, related_name="routes_to")
-    distance = models.PositiveIntegerField()
+    distance_km = models.PositiveIntegerField()
 
     class Meta:
-        ordering = ["distance"]
+        ordering = ["distance_km"]
 
     def __str__(self) -> str:
         return f"{self.source.name} -> {self.destination.name}"
@@ -57,6 +57,7 @@ class Train(models.Model):
 class Crew(models.Model):
     first_name = models.CharField(max_length=255)
     last_name = models.CharField(max_length=255)
+    position = models.CharField(max_length=255, default="staff")
 
     class Meta:
         ordering = ["first_name"]
@@ -66,7 +67,7 @@ class Crew(models.Model):
         return f"{self.first_name} {self.last_name}"
 
     def __str__(self) -> str:
-        return self.full_name
+        return f"{self.full_name} position - {self.position}"
 
 
 class Journey(models.Model):
