@@ -7,6 +7,7 @@ class Station(models.Model):
     name = models.CharField(max_length=255)
     latitude = models.FloatField()
     longitude = models.FloatField()
+    objects = models.Manager()
 
     class Meta:
         ordering = ["name"]
@@ -19,6 +20,7 @@ class Route(models.Model):
     source = models.ForeignKey(Station, on_delete=models.CASCADE, related_name="routes_from")
     destination = models.ForeignKey(Station, on_delete=models.CASCADE, related_name="routes_to")
     distance_km = models.PositiveIntegerField()
+    objects = models.Manager()
 
     class Meta:
         ordering = ["distance_km"]
@@ -30,6 +32,7 @@ class Route(models.Model):
 class TrainType(models.Model):
     name = models.CharField(max_length=63, unique=True)
     description = models.TextField(null=True, blank=True)
+    objects = models.Manager()
 
     class Meta:
         ordering = ["name"]
@@ -43,6 +46,7 @@ class Train(models.Model):
     cargo_num = models.PositiveIntegerField()
     places_in_cargo = models.PositiveIntegerField()
     train_type = models.ForeignKey(TrainType, on_delete=models.CASCADE, related_name="trains")
+    objects = models.Manager()
 
     class Meta:
         ordering = ["cargo_num"]
@@ -59,6 +63,7 @@ class Crew(models.Model):
     first_name = models.CharField(max_length=255)
     last_name = models.CharField(max_length=255)
     position = models.CharField(max_length=255, default="staff")
+    objects = models.Manager()
 
     class Meta:
         ordering = ["first_name"]
@@ -77,6 +82,7 @@ class Journey(models.Model):
     departure_time = models.DateTimeField()
     arrival_time = models.DateTimeField()
     crew = models.ManyToManyField(Crew, related_name="journeys")
+    objects = models.Manager()
 
     class Meta:
         ordering = ["-departure_time"]
@@ -88,6 +94,7 @@ class Journey(models.Model):
 class Order(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
     user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name="orders")
+    objects = models.Manager()
 
     class Meta:
         ordering = ["-created_at"]
@@ -101,6 +108,7 @@ class Ticket(models.Model):
     place = models.PositiveIntegerField()
     journey = models.ForeignKey(Journey, on_delete=models.CASCADE, related_name="tickets")
     order = models.ForeignKey(Order, on_delete=models.CASCADE, related_name="tickets")
+    objects = models.Manager()
 
     class Meta:
         unique_together = ("journey", "cargo", "place")
