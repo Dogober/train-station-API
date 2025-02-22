@@ -29,6 +29,7 @@ class Route(models.Model):
 
 class TrainType(models.Model):
     name = models.CharField(max_length=63, unique=True)
+    description = models.TextField(null=True, blank=True)
 
     class Meta:
         ordering = ["name"]
@@ -51,7 +52,7 @@ class Train(models.Model):
         return self.cargo_num * self.places_in_cargo
 
     def __str__(self) -> str:
-        return f"Model: {self.name} with capacity: {self.capacity}"
+        return f"'{self.name}' (Capacity: {self.capacity} places)"
 
 
 class Crew(models.Model):
@@ -145,5 +146,5 @@ class Ticket(models.Model):
 
     def __str__(self):
         return (
-            f"{str(self.journey)} (cargo: {self.cargo}, place: {self.place})"
+            f"Cargo {self.cargo} | Place {self.place}"
         )
