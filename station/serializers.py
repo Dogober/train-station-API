@@ -53,6 +53,12 @@ class TrainSerializer(serializers.ModelSerializer):
         fields = ("id", "name", "cargo_num", "places_in_cargo", "train_type", )
 
 
+class TrainImageSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Train
+        fields = ("id", "image")
+
+
 class TrainTypeSerializer(serializers.ModelSerializer):
     class Meta:
         model = TrainType
@@ -68,7 +74,15 @@ class TrainListSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Train
-        fields = ("id", "name", "cargo_num", "places_in_cargo", "capacity", "train_type", )
+        fields = (
+            "id",
+            "name",
+            "image",
+            "cargo_num",
+            "places_in_cargo",
+            "capacity",
+            "train_type",
+        )
 
 
 class TrainRetrieveSerializer(serializers.ModelSerializer):
@@ -77,7 +91,15 @@ class TrainRetrieveSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Train
-        fields = ("id", "name", "cargo_num", "places_in_cargo", "capacity", "train_type", )
+        fields = (
+            "id",
+            "name",
+            "image",
+            "cargo_num",
+            "places_in_cargo",
+            "capacity",
+            "train_type",
+        )
 
 
 class JourneySerializer(serializers.ModelSerializer):
@@ -89,6 +111,10 @@ class JourneySerializer(serializers.ModelSerializer):
 class JourneyListSerializer(serializers.ModelSerializer):
     route = serializers.StringRelatedField(read_only=True)
     train = serializers.StringRelatedField(read_only=True)
+    train_image = serializers.ImageField(
+        source="train.image",
+        read_only=True
+    )
     available_places = serializers.IntegerField(read_only=True)
     crew = serializers.SlugRelatedField(
         slug_field="full_name",
@@ -102,6 +128,7 @@ class JourneyListSerializer(serializers.ModelSerializer):
             "id",
             "route",
             "train",
+            "train_image",
             "available_places",
             "crew",
             "departure_time",
