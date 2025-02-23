@@ -1,10 +1,8 @@
-import os
-import uuid
-
 from django.conf import settings
 from django.core.exceptions import ValidationError
 from django.db import models
-from django.utils.text import slugify
+
+from common.utils import create_custom_path
 
 
 class Station(models.Model):
@@ -43,14 +41,6 @@ class TrainType(models.Model):
 
     def __str__(self) -> str:
         return self.name
-
-
-def create_custom_path(instance, filename):
-   _, extension = os.path.splitext(filename)
-   return os.path.join(
-       "uploads/trains/",
-       f"{slugify(instance.name)}-{uuid.uuid4()}{extension}"
-   )
 
 
 class Train(models.Model):
@@ -169,3 +159,15 @@ class Ticket(models.Model):
         return (
             f"Cargo {self.cargo} | Place {self.place}"
         )
+
+
+class APIUsage(models.Model):
+    endpoint = models.CharField(max_length=255)
+    method = models.CharField(max_length=10)  # GET, POST и т.д.
+    timestamp = models.DateTimeField(auto_now_add=True)
+    response_status = models.IntegerField()
+    user_ip = models.GenericIPAddressField()
+    objects = models.Manager()
+
+    class Meta:
+        ordering = ['-timestamp']

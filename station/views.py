@@ -1,9 +1,10 @@
 from django.db.models import F, Count, Q
-from rest_framework import viewsets, status
+from rest_framework import viewsets, status, mixins
 from rest_framework.decorators import action
-from rest_framework.permissions import IsAuthenticated
+from rest_framework.permissions import IsAuthenticated, IsAdminUser
 from rest_framework.response import Response
 
+from common.mixins import APILoggingMixin
 from station.models import (
     Station,
     Route,
@@ -12,6 +13,7 @@ from station.models import (
     Train,
     Journey,
     Order,
+    APIUsage,
 )
 from station.serializers import (
     StationSerializer,
@@ -28,10 +30,11 @@ from station.serializers import (
     JourneyRetrieveSerializer,
     OrderSerializer,
     TrainImageSerializer,
+    APIUsageSerializer,
 )
 
 
-class StationViewSet(viewsets.ModelViewSet):
+class StationViewSet(APILoggingMixin, viewsets.ModelViewSet):
     queryset = Station.objects.all()
     serializer_class = StationSerializer
 
@@ -43,7 +46,7 @@ class StationViewSet(viewsets.ModelViewSet):
         return queryset
 
 
-class RouteViewSet(viewsets.ModelViewSet):
+class RouteViewSet(APILoggingMixin, viewsets.ModelViewSet):
     queryset = Route.objects.all().select_related("source", "destination")
 
     def get_serializer_class(self):
@@ -54,7 +57,7 @@ class RouteViewSet(viewsets.ModelViewSet):
         return RouteSerializer
 
 
-class CrewViewSet(viewsets.ModelViewSet):
+class CrewViewSet(APILoggingMixin, viewsets.ModelViewSet):
     queryset = Crew.objects.all()
     serializer_class = CrewSerializer
 
@@ -68,7 +71,7 @@ class CrewViewSet(viewsets.ModelViewSet):
         return queryset
 
 
-class TrainTypeViewSet(viewsets.ModelViewSet):
+class TrainTypeViewSet(APILoggingMixin, viewsets.ModelViewSet):
     queryset = TrainType.objects.all()
     serializer_class = TrainTypeSerializer
 
@@ -80,7 +83,7 @@ class TrainTypeViewSet(viewsets.ModelViewSet):
         return queryset
 
 
-class TrainViewSet(viewsets.ModelViewSet):
+class TrainViewSet(APILoggingMixin, viewsets.ModelViewSet):
     queryset = Train.objects.all().prefetch_related("train_type")
 
     def get_serializer_class(self):
@@ -114,7 +117,7 @@ class TrainViewSet(viewsets.ModelViewSet):
         return queryset
 
 
-class JourneyViewSet(viewsets.ModelViewSet):
+class JourneyViewSet(APILoggingMixin, viewsets.ModelViewSet):
     queryset = Journey.objects.all()
 
     def get_serializer_class(self):
@@ -141,7 +144,7 @@ class JourneyViewSet(viewsets.ModelViewSet):
         return queryset
 
 
-class OrderViewSet(viewsets.ModelViewSet):
+class OrderViewSet(APILoggingMixin, viewsets.ModelViewSet):
     queryset = Order.objects.all()
     serializer_class = OrderSerializer
     permission_classes = [IsAuthenticated]
@@ -151,3 +154,21 @@ class OrderViewSet(viewsets.ModelViewSet):
 
     def perform_create(self, serializer):
         serializer.save(user=self.request.user)
+
+
+class APIUsageViewSet(viewsets.GenericViewSet, mixins.ListModelMixin):
+    queryset = APIUsage.objects.all()
+    serializer_class = APIUsageSerializer
+    permission_classes = [IsAdminUser]
+
+    def get_queryset(self):
+        queryset = self.queryset
+        method = self.request.query_params.get("method")
+        response_status = self.request.query_params.get("status")
+
+        if method:
+            queryset = queryset.filter(method__icontains=method)
+        if response_status:
+            queryset = queryset.filter(response_status__icontains=response_status)
+
+        return queryset.distinct()
