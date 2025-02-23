@@ -1,4 +1,4 @@
-from django.db.models import F, Count
+from django.db.models import F, Count, Q
 from rest_framework import viewsets, status
 from rest_framework.decorators import action
 from rest_framework.permissions import IsAuthenticated
@@ -35,9 +35,16 @@ class StationViewSet(viewsets.ModelViewSet):
     queryset = Station.objects.all()
     serializer_class = StationSerializer
 
+    def get_queryset(self):
+        queryset = self.queryset
+        name = self.request.query_params.get("name")
+        if name:
+            queryset = queryset.filter(name__icontains=name)
+        return queryset
+
 
 class RouteViewSet(viewsets.ModelViewSet):
-    queryset = Route.objects.all().prefetch_related("source", "destination")
+    queryset = Route.objects.all().select_related("source", "destination")
 
     def get_serializer_class(self):
         if self.action == "list":
@@ -51,10 +58,26 @@ class CrewViewSet(viewsets.ModelViewSet):
     queryset = Crew.objects.all()
     serializer_class = CrewSerializer
 
+    def get_queryset(self):
+        queryset = self.queryset
+        name_query = self.request.query_params.get("name_query")
+        if name_query:
+            queryset = queryset.filter(
+                Q(first_name__icontains=name_query) | Q(last_name__icontains=name_query)
+            )
+        return queryset
+
 
 class TrainTypeViewSet(viewsets.ModelViewSet):
     queryset = TrainType.objects.all()
     serializer_class = TrainTypeSerializer
+
+    def get_queryset(self):
+        queryset = self.queryset
+        name = self.request.query_params.get("name")
+        if name:
+            queryset = queryset.filter(name__icontains=name)
+        return queryset
 
 
 class TrainViewSet(viewsets.ModelViewSet):
@@ -77,6 +100,19 @@ class TrainViewSet(viewsets.ModelViewSet):
         serializer.save()
         return Response(serializer.data, status=status.HTTP_200_OK)
 
+    @staticmethod
+    def _params_to_ints(qs):
+        """Converts a list of string IDs to a list of integers"""
+        return [int(str_id) for str_id in qs.split(",")]
+
+    def get_queryset(self):
+        queryset = self.queryset
+        types_ids = self.request.query_params.get("types")
+        if types_ids:
+            types_ids = self._params_to_ints(types_ids)
+            queryset = queryset.filter(train_type__in=types_ids)
+        return queryset
+
 
 class JourneyViewSet(viewsets.ModelViewSet):
     queryset = Journey.objects.all()
@@ -89,17 +125,20 @@ class JourneyViewSet(viewsets.ModelViewSet):
         return JourneySerializer
 
     def get_queryset(self):
+        queryset = self.queryset
+        date = self.request.query_params.get("date")
         if self.action == "list":
-            return self.queryset.prefetch_related(
-                "route", "train", "crew"
-            ).annotate(
+            queryset = queryset.select_related().prefetch_related("crew").annotate(
                 available_places=F("train__cargo_num") * F("train__places_in_cargo") - Count("tickets")
             )
         if self.action == "retrieve":
-            return self.queryset.prefetch_related(
-                "route", "train", "crew", "tickets"
+            queryset = queryset.select_related().prefetch_related("crew", "tickets")
+        if date:
+            queryset = queryset.filter(
+                departure_time__date=date
             )
-        return self.queryset
+
+        return queryset
 
 
 class OrderViewSet(viewsets.ModelViewSet):
@@ -108,7 +147,7 @@ class OrderViewSet(viewsets.ModelViewSet):
     permission_classes = [IsAuthenticated]
 
     def get_queryset(self):
-        return self.queryset.filter(user=self.request.user)
+        return self.queryset.prefetch_related("tickets").filter(user=self.request.user)
 
     def perform_create(self, serializer):
         serializer.save(user=self.request.user)
