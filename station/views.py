@@ -1,7 +1,7 @@
 from django.db.models import F, Count, Q
-from rest_framework import viewsets, status, mixins
+from rest_framework import viewsets, status
 from rest_framework.decorators import action
-from rest_framework.permissions import IsAuthenticated, IsAdminUser
+from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 
 from common.mixins import APILoggingMixin
@@ -13,7 +13,6 @@ from station.models import (
     Train,
     Journey,
     Order,
-    APIUsage,
 )
 from station.serializers import (
     StationSerializer,
@@ -30,7 +29,6 @@ from station.serializers import (
     JourneyRetrieveSerializer,
     OrderSerializer,
     TrainImageSerializer,
-    APIUsageSerializer,
 )
 
 
@@ -118,7 +116,11 @@ class TrainViewSet(APILoggingMixin, viewsets.ModelViewSet):
 
 
 class JourneyViewSet(APILoggingMixin, viewsets.ModelViewSet):
-    queryset = Journey.objects.all()
+    queryset = Journey.objects.all().select_related(
+        "train",
+        "route__source",
+        "route__destination"
+    ).prefetch_related("crew")
 
     def get_serializer_class(self):
         if self.action == "list":
@@ -131,11 +133,11 @@ class JourneyViewSet(APILoggingMixin, viewsets.ModelViewSet):
         queryset = self.queryset
         date = self.request.query_params.get("date")
         if self.action == "list":
-            queryset = queryset.select_related().prefetch_related("crew").annotate(
+            queryset = queryset.annotate(
                 available_places=F("train__cargo_num") * F("train__places_in_cargo") - Count("tickets")
             )
         if self.action == "retrieve":
-            queryset = queryset.select_related().prefetch_related("crew", "tickets")
+            queryset = queryset.select_related("tickets")
         if date:
             queryset = queryset.filter(
                 departure_time__date=date
@@ -154,21 +156,3 @@ class OrderViewSet(APILoggingMixin, viewsets.ModelViewSet):
 
     def perform_create(self, serializer):
         serializer.save(user=self.request.user)
-
-
-class APIUsageViewSet(viewsets.GenericViewSet, mixins.ListModelMixin):
-    queryset = APIUsage.objects.all()
-    serializer_class = APIUsageSerializer
-    permission_classes = [IsAdminUser]
-
-    def get_queryset(self):
-        queryset = self.queryset
-        method = self.request.query_params.get("method")
-        response_status = self.request.query_params.get("status")
-
-        if method:
-            queryset = queryset.filter(method__icontains=method)
-        if response_status:
-            queryset = queryset.filter(response_status__icontains=response_status)
-
-        return queryset.distinct()

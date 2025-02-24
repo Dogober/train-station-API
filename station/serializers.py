@@ -10,7 +10,6 @@ from station.models import (
     Journey,
     Ticket,
     Order,
-    APIUsage,
 )
 
 
@@ -194,9 +193,3 @@ class OrderSerializer(serializers.ModelSerializer):
             for ticket_data in tickets_data:
                 Ticket.objects.create(order=order, **ticket_data)
             return order
-
-
-class APIUsageSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = APIUsage
-        fields = "__all__"

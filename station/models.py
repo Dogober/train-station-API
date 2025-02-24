@@ -28,7 +28,7 @@ class Route(models.Model):
         ordering = ["distance_km"]
 
     def __str__(self) -> str:
-        return f"{self.source.name} -> {self.destination.name}"
+        return f"{self.source} -> {self.destination}"
 
 
 class TrainType(models.Model):
@@ -91,7 +91,7 @@ class Journey(models.Model):
         ordering = ["-departure_time"]
 
     def __str__(self) -> str:
-        return f"Route: {str(self.route)} at {self.departure_time}"
+        return f"Route: {self.route} at {self.departure_time}"
 
 
 class Order(models.Model):
@@ -159,15 +159,3 @@ class Ticket(models.Model):
         return (
             f"Cargo {self.cargo} | Place {self.place}"
         )
-
-
-class APIUsage(models.Model):
-    endpoint = models.CharField(max_length=255)
-    method = models.CharField(max_length=10)  # GET, POST и т.д.
-    timestamp = models.DateTimeField(auto_now_add=True)
-    response_status = models.IntegerField()
-    user_ip = models.GenericIPAddressField()
-    objects = models.Manager()
-
-    class Meta:
-        ordering = ['-timestamp']

@@ -37,6 +37,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     "station",
     "user",
+    "api_usage",
     "rest_framework",
     "drf_spectacular",
     "debug_toolbar",
