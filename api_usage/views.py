@@ -1,3 +1,4 @@
+from drf_spectacular.utils import extend_schema, OpenApiParameter
 from rest_framework import viewsets, mixins
 from rest_framework.permissions import IsAdminUser
 
@@ -21,3 +22,28 @@ class APIUsageViewSet(viewsets.GenericViewSet, mixins.ListModelMixin):
             queryset = queryset.filter(response_status__icontains=response_status)
 
         return queryset.distinct()
+
+    @extend_schema(
+        parameters=[
+            OpenApiParameter(
+                "method",
+                type=str,
+                description="Optional filter to search API usage "
+                            "logs by HTTP method (e.g., GET, POST). "
+                            "This parameter allows you to retrieve logs "
+                            "for requests made with the specified HTTP method.",
+                required=False,
+            ),
+            OpenApiParameter(
+                "status",
+                type=int,
+                description="Optional filter to search API usage logs "
+                            "by response status code. "
+                            "You can provide specific status codes "
+                            "to filter the logs accordingly.",
+                required=False,
+            ),
+        ]
+    )
+    def list(self, request, *args, **kwargs):
+        return super().list(request, *args, **kwargs)
