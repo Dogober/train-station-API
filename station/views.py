@@ -137,13 +137,13 @@ class JourneyViewSet(APILoggingMixin, viewsets.ModelViewSet):
                 available_places=F("train__cargo_num") * F("train__places_in_cargo") - Count("tickets")
             )
         if self.action == "retrieve":
-            queryset = queryset.select_related("tickets")
+            queryset = queryset.prefetch_related("tickets")
         if date:
             queryset = queryset.filter(
                 departure_time__date=date
             )
 
-        return queryset
+        return queryset.order_by("-departure_time")
 
 
 class OrderViewSet(APILoggingMixin, viewsets.ModelViewSet):

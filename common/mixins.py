@@ -2,7 +2,7 @@ from rest_framework import viewsets
 from rest_framework.response import Response
 from django.http import HttpRequest
 
-from station.models import APIUsage
+from api_usage.models import APIUsage
 
 
 class APILoggingMixin(viewsets.ModelViewSet):
