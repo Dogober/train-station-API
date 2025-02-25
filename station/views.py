@@ -1,4 +1,5 @@
 from django.db.models import F, Count, Q
+from drf_spectacular.utils import extend_schema, OpenApiParameter
 from rest_framework import viewsets, status
 from rest_framework.decorators import action
 from rest_framework.permissions import IsAuthenticated
@@ -43,6 +44,20 @@ class StationViewSet(APILoggingMixin, viewsets.ModelViewSet):
             queryset = queryset.filter(name__icontains=name)
         return queryset
 
+    @extend_schema(
+        parameters=[
+            OpenApiParameter(
+                "name",
+                type=str,
+                description="Optional filter to search for "
+                            "station by name.",
+                required=False,
+            )
+        ]
+    )
+    def list(self, request, *args, **kwargs):
+        return super().list(request, *args, **kwargs)
+
 
 class RouteViewSet(APILoggingMixin, viewsets.ModelViewSet):
     queryset = Route.objects.all().select_related("source", "destination")
@@ -68,6 +83,23 @@ class CrewViewSet(APILoggingMixin, viewsets.ModelViewSet):
             )
         return queryset
 
+    @extend_schema(
+        parameters=[
+            OpenApiParameter(
+                "name_query",
+                type=str,
+                description="Optional filter to search for crew members "
+                            "by their first or last name. "
+                            "This parameter allows you to find crew members "
+                            "whose names contain the "
+                            "provided search term, regardless of case sensitivity.",
+                required=False,
+            )
+        ]
+    )
+    def list(self, request, *args, **kwargs):
+        return super().list(request, *args, **kwargs)
+
 
 class TrainTypeViewSet(APILoggingMixin, viewsets.ModelViewSet):
     queryset = TrainType.objects.all()
@@ -79,6 +111,20 @@ class TrainTypeViewSet(APILoggingMixin, viewsets.ModelViewSet):
         if name:
             queryset = queryset.filter(name__icontains=name)
         return queryset
+
+    @extend_schema(
+        parameters=[
+            OpenApiParameter(
+                "name",
+                type=str,
+                description="Optional filter to search for "
+                            "train type by name.",
+                required=False,
+            )
+        ]
+    )
+    def list(self, request, *args, **kwargs):
+        return super().list(request, *args, **kwargs)
 
 
 class TrainViewSet(APILoggingMixin, viewsets.ModelViewSet):
@@ -114,6 +160,24 @@ class TrainViewSet(APILoggingMixin, viewsets.ModelViewSet):
             queryset = queryset.filter(train_type__in=types_ids)
         return queryset
 
+    @extend_schema(
+        parameters=[
+            OpenApiParameter(
+                "types",
+                type=str,
+                description="Comma-separated list of train "
+                            "type IDs to filter journeys. "
+                            "This parameter allows you to retrieve "
+                            "journeys that are associated "
+                            "with the specified train types, enabling "
+                            "targeted searches based on type.",
+                required=False,
+            )
+        ]
+    )
+    def list(self, request, *args, **kwargs):
+        return super().list(request, *args, **kwargs)
+
 
 class JourneyViewSet(APILoggingMixin, viewsets.ModelViewSet):
     queryset = Journey.objects.all().select_related(
@@ -144,6 +208,23 @@ class JourneyViewSet(APILoggingMixin, viewsets.ModelViewSet):
             )
 
         return queryset.order_by("-departure_time")
+
+    @extend_schema(
+        parameters=[
+            OpenApiParameter(
+                "date",
+                type=str,
+                description="Optional filter to retrieve journeys "
+                            "based on the specified departure date. "
+                            "The date should be provided in the format YYYY-MM-DD. "
+                            "If provided, only journeys with a departure "
+                            "time matching this date will be returned.",
+                required=False,
+            )
+        ]
+    )
+    def list(self, request, *args, **kwargs):
+        return super().list(request, *args, **kwargs)
 
 
 class OrderViewSet(APILoggingMixin, viewsets.ModelViewSet):
