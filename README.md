@@ -70,8 +70,12 @@ SECRET_KEY=
 ```shell
   docker-compose up --build
 ```
+2. **Initial Data**:
+   Initial data will be automatically loaded when the Docker containers are started. This includes two users:
+   - **Admin**: Email: `admin@gmail.com`, Password: `Q1234567!`
+   - **Test User**: Email: `test_user@gmail.com`, Password: `Q1234567!`
 
-2. **Database Connection**:
+3. **Database Connection**:
    If you want to run the project in Docker, make sure to change the `DATABASE_TYPE` environment variable to `postgres`.
 
 ### Creating a Superuser

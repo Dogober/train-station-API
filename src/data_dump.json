@@ -1,0 +1,469 @@
+[
+{
+    "model": "station.station",
+    "pk": 1,
+    "fields": {
+        "name": "Kiyv Central Station",
+        "latitude": 50.44082779517021,
+        "longitude": 30.49175977860588
+    }
+},
+{
+    "model": "station.station",
+    "pk": 2,
+    "fields": {
+        "name": "Lviv Podzamche Station",
+        "latitude": 49.851421355286426,
+        "longitude": 24.03373971995088
+    }
+},
+{
+    "model": "station.route",
+    "pk": 1,
+    "fields": {
+        "source": 1,
+        "destination": 2,
+        "distance_km": 514
+    }
+},
+{
+    "model": "station.traintype",
+    "pk": 1,
+    "fields": {
+        "name": "Passenger",
+        "description": "For trains primarily used for passenger transport."
+    }
+},
+{
+    "model": "station.traintype",
+    "pk": 2,
+    "fields": {
+        "name": "Freight",
+        "description": "For trains that carry goods and cargo."
+    }
+},
+{
+    "model": "station.traintype",
+    "pk": 3,
+    "fields": {
+        "name": "Commuter",
+        "description": "For trains designed for short-distance travel, typically between suburbs and cities."
+    }
+},
+{
+    "model": "station.traintype",
+    "pk": 4,
+    "fields": {
+        "name": "High-Speed",
+        "description": "For trains that travel at high speeds, connecting major cities."
+    }
+},
+{
+    "model": "station.traintype",
+    "pk": 5,
+    "fields": {
+        "name": "Regional",
+        "description": "For trains serving specific regions with multiple stops."
+    }
+},
+{
+    "model": "station.traintype",
+    "pk": 6,
+    "fields": {
+        "name": "Intercity",
+        "description": "For trains that connect different cities."
+    }
+},
+{
+    "model": "station.traintype",
+    "pk": 7,
+    "fields": {
+        "name": "Light Rail",
+        "description": "For trains that operate primarily in urban areas, often on dedicated tracks."
+    }
+},
+{
+    "model": "station.traintype",
+    "pk": 8,
+    "fields": {
+        "name": "Tram",
+        "description": "For streetcars or trolleys that operate within city limits."
+    }
+},
+{
+    "model": "station.traintype",
+    "pk": 9,
+    "fields": {
+        "name": "Luxury",
+        "description": "For trains providing premium travel experiences."
+    }
+},
+{
+    "model": "station.traintype",
+    "pk": 10,
+    "fields": {
+        "name": "Tourist",
+        "description": "For scenic trains designed for leisure travel."
+    }
+},
+{
+    "model": "station.traintype",
+    "pk": 12,
+    "fields": {
+        "name": "d",
+        "description": "d"
+    }
+},
+{
+    "model": "station.train",
+    "pk": 1,
+    "fields": {
+        "name": "Ukrzaliznytsia Passenger",
+        "cargo_num": 10,
+        "places_in_cargo": 60,
+        "train_type": 1,
+        "image": "<null>"
+    }
+},
+{
+    "model": "station.train",
+    "pk": 2,
+    "fields": {
+        "name": "Kyiv Suburban Train",
+        "cargo_num": 6,
+        "places_in_cargo": 30,
+        "train_type": 3,
+        "image": ""
+    }
+},
+{
+    "model": "station.train",
+    "pk": 3,
+    "fields": {
+        "name": "Intercity+",
+        "cargo_num": 8,
+        "places_in_cargo": 50,
+        "train_type": 4,
+        "image": ""
+    }
+},
+{
+    "model": "station.train",
+    "pk": 4,
+    "fields": {
+        "name": "Regional Train",
+        "cargo_num": 5,
+        "places_in_cargo": 40,
+        "train_type": 5,
+        "image": ""
+    }
+},
+{
+    "model": "station.train",
+    "pk": 5,
+    "fields": {
+        "name": "Night Train (Kyiv to Lviv)",
+        "cargo_num": 10,
+        "places_in_cargo": 50,
+        "train_type": 6,
+        "image": ""
+    }
+},
+{
+    "model": "station.train",
+    "pk": 6,
+    "fields": {
+        "name": "Kyiv Light Rail",
+        "cargo_num": 4,
+        "places_in_cargo": 30,
+        "train_type": 7,
+        "image": "<null>"
+    }
+},
+{
+    "model": "station.train",
+    "pk": 7,
+    "fields": {
+        "name": "Lviv Tram System",
+        "cargo_num": 5,
+        "places_in_cargo": 20,
+        "train_type": 8,
+        "image": ""
+    }
+},
+{
+    "model": "station.train",
+    "pk": 8,
+    "fields": {
+        "name": "Palace on Wheels",
+        "cargo_num": 3,
+        "places_in_cargo": 10,
+        "train_type": 9,
+        "image": "<null>"
+    }
+},
+{
+    "model": "station.train",
+    "pk": 9,
+    "fields": {
+        "name": "Carpathian Express",
+        "cargo_num": 5,
+        "places_in_cargo": 30,
+        "train_type": 10,
+        "image": ""
+    }
+},
+{
+    "model": "station.crew",
+    "pk": 1,
+    "fields": {
+        "first_name": "Mykyta",
+        "last_name": "Balabanov",
+        "position": "Principal"
+    }
+},
+{
+    "model": "station.crew",
+    "pk": 2,
+    "fields": {
+        "first_name": "Anastasya",
+        "last_name": "Stepanenko",
+        "position": "Route Manager"
+    }
+},
+{
+    "model": "station.crew",
+    "pk": 3,
+    "fields": {
+        "first_name": "Dmitriy",
+        "last_name": "Firsov",
+        "position": "Train Driver"
+    }
+},
+{
+    "model": "station.journey",
+    "pk": 1,
+    "fields": {
+        "route": 1,
+        "train": 5,
+        "departure_time": "2025-03-15T14:30:00Z",
+        "arrival_time": "2025-03-15T16:30:00Z",
+        "crew": [
+            2,
+            1
+        ]
+    }
+},
+{
+    "model": "station.order",
+    "pk": 1,
+    "fields": {
+        "created_at": "2025-02-22T16:17:59.997Z",
+        "user": 1
+    }
+},
+{
+    "model": "station.order",
+    "pk": 2,
+    "fields": {
+        "created_at": "2025-02-22T18:28:16.876Z",
+        "user": 2
+    }
+},
+{
+    "model": "station.ticket",
+    "pk": 1,
+    "fields": {
+        "cargo": 1,
+        "place": 1,
+        "journey": 1,
+        "order": 1
+    }
+},
+{
+    "model": "station.ticket",
+    "pk": 2,
+    "fields": {
+        "cargo": 1,
+        "place": 2,
+        "journey": 1,
+        "order": 1
+    }
+},
+{
+    "model": "station.ticket",
+    "pk": 3,
+    "fields": {
+        "cargo": 10,
+        "place": 50,
+        "journey": 1,
+        "order": 2
+    }
+},
+{
+    "model": "user.user",
+    "pk": 1,
+    "fields": {
+        "password": "pbkdf2_sha256$870000$3jAy4g0zgUOTtD86Uu6DPX$gUFV0AH+eu7D9kQKl/5nUFNtbBKBqxJbcXKvnbkAmL8=",
+        "last_login": "2025-02-23T12:52:07.385Z",
+        "is_superuser": true,
+        "first_name": "",
+        "last_name": "",
+        "is_staff": true,
+        "is_active": true,
+        "date_joined": "2025-02-21T14:34:58.470Z",
+        "email": "admin@gmail.com",
+        "groups": [],
+        "user_permissions": []
+    }
+},
+{
+    "model": "user.user",
+    "pk": 2,
+    "fields": {
+        "password": "pbkdf2_sha256$870000$syLGpmAtU5enXcDNBrAywg$0aZ2ovUTjNyEeeXzm2Qdi6yqBv5/F5Wj/nSgiWtm4dI=",
+        "last_login": null,
+        "is_superuser": false,
+        "first_name": "",
+        "last_name": "",
+        "is_staff": false,
+        "is_active": true,
+        "date_joined": "2025-02-22T18:15:19.803Z",
+        "email": "test_user@gmail.com",
+        "groups": [],
+        "user_permissions": []
+    }
+},
+{
+    "model": "api_usage.apiusage",
+    "pk": 1,
+    "fields": {
+        "endpoint": "http://127.0.0.1:8000/api/user/me/",
+        "method": "GET",
+        "timestamp": "2025-02-24T13:54:21.328Z",
+        "response_status": 200,
+        "user_ip": "127.0.0.1"
+    }
+},
+{
+    "model": "api_usage.apiusage",
+    "pk": 2,
+    "fields": {
+        "endpoint": "http://127.0.0.1:8000/api/station/journeys/",
+        "method": "GET",
+        "timestamp": "2025-02-24T13:54:30.397Z",
+        "response_status": 200,
+        "user_ip": "127.0.0.1"
+    }
+},
+{
+    "model": "api_usage.apiusage",
+    "pk": 3,
+    "fields": {
+        "endpoint": "http://127.0.0.1:8000/api/station/trains/?types=1",
+        "method": "GET",
+        "timestamp": "2025-02-24T16:55:41.329Z",
+        "response_status": 200,
+        "user_ip": "127.0.0.1"
+    }
+},
+{
+    "model": "api_usage.apiusage",
+    "pk": 4,
+    "fields": {
+        "endpoint": "http://127.0.0.1:8000/api/station/trains/",
+        "method": "GET",
+        "timestamp": "2025-02-24T16:55:44.005Z",
+        "response_status": 200,
+        "user_ip": "127.0.0.1"
+    }
+},
+{
+    "model": "api_usage.apiusage",
+    "pk": 5,
+    "fields": {
+        "endpoint": "http://127.0.0.1:8000/api/station/trains/1/",
+        "method": "GET",
+        "timestamp": "2025-02-24T16:56:08.956Z",
+        "response_status": 200,
+        "user_ip": "127.0.0.1"
+    }
+},
+{
+    "model": "api_usage.apiusage",
+    "pk": 6,
+    "fields": {
+        "endpoint": "http://127.0.0.1:8000/api/station/journeys/",
+        "method": "GET",
+        "timestamp": "2025-02-24T18:42:49.228Z",
+        "response_status": 200,
+        "user_ip": "127.0.0.1"
+    }
+},
+{
+    "model": "api_usage.apiusage",
+    "pk": 7,
+    "fields": {
+        "endpoint": "http://127.0.0.1:8000/api/station/journeys/",
+        "method": "GET",
+        "timestamp": "2025-02-24T19:11:07.539Z",
+        "response_status": 200,
+        "user_ip": "127.0.0.1"
+    }
+},
+{
+    "model": "api_usage.apiusage",
+    "pk": 8,
+    "fields": {
+        "endpoint": "http://127.0.0.1:8000/api/station/orders/",
+        "method": "GET",
+        "timestamp": "2025-02-24T21:08:44.848Z",
+        "response_status": 200,
+        "user_ip": "127.0.0.1"
+    }
+},
+{
+    "model": "api_usage.apiusage",
+    "pk": 9,
+    "fields": {
+        "endpoint": "http://127.0.0.1:8000/api/station/stations/?name=t",
+        "method": "GET",
+        "timestamp": "2025-02-25T10:32:17.897Z",
+        "response_status": 200,
+        "user_ip": "127.0.0.1"
+    }
+},
+{
+    "model": "api_usage.apiusage",
+    "pk": 10,
+    "fields": {
+        "endpoint": "http://127.0.0.1:8000/api/station/stations/?name=Cent",
+        "method": "GET",
+        "timestamp": "2025-02-25T10:32:44.551Z",
+        "response_status": 200,
+        "user_ip": "127.0.0.1"
+    }
+},
+{
+    "model": "api_usage.apiusage",
+    "pk": 11,
+    "fields": {
+        "endpoint": "http://127.0.0.1:8000/api/station/journeys/",
+        "method": "GET",
+        "timestamp": "2025-02-25T16:54:05.934Z",
+        "response_status": 200,
+        "user_ip": "127.0.0.1"
+    }
+},
+{
+    "model": "api_usage.apiusage",
+    "pk": 12,
+    "fields": {
+        "endpoint": "http://127.0.0.1:8000/api/station/routes/",
+        "method": "GET",
+        "timestamp": "2025-02-25T17:32:24.180Z",
+        "response_status": 200,
+        "user_ip": "127.0.0.1"
+    }
+}
+]
